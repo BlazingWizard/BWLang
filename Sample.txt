@@ -1,0 +1,19 @@
+a = new! hashset();
+a.add(1);
+a.add(324);
+
+if (a.contains(1))
+{
+    c = (3 + 1) * 2;
+    c = c / 2;
+}
+
+b = 0;
+ls = new! list();
+while (b < 5)
+{
+    ls.add(b);    
+    b = b + 1;
+}
+f = ls.get(4);
+print;

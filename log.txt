@@ -1,0 +1,8 @@
+============
+TOKEN INFO
+============
+VAR : aA_OP : =K_NEW : new!VAR : hashsetL_B : (R_B : )EOL : ;VAR : aK_DOT : .VAR : addL_B : (DIGIT : 1R_B : )EOL : ;VAR : aK_DOT : .VAR : addL_B : (DIGIT : 324R_B : )EOL : ;K_IF : ifL_B : (VAR : aK_DOT : .VAR : containsL_B : (DIGIT : 1R_B : )R_B : )L_CB : {VAR : cA_OP : =L_B : (DIGIT : 3OP : +DIGIT : 1R_B : )OP : *DIGIT : 2EOL : ;VAR : cA_OP : =VAR : cOP : /DIGIT : 2EOL : ;R_CB : }VAR : bA_OP : =DIGIT : 0EOL : ;VAR : lsA_OP : =K_NEW : new!VAR : listL_B : (R_B : )EOL : ;K_WHILE : whileL_B : (VAR : bL_OP : <DIGIT : 5R_B : )L_CB : {VAR : lsK_DOT : .VAR : addL_B : (VAR : bR_B : )EOL : ;VAR : bA_OP : =VAR : bOP : +DIGIT : 1EOL : ;R_CB : }VAR : fA_OP : =VAR : lsK_DOT : .VAR : getL_B : (DIGIT : 4R_B : )EOL : ;K_PRINT : printEOL : ;
+============
+POLIS INFO
+============
+Var:aVar:hashsetOpNew:new!Assigment:=Var:aVar:addDouble:1MethodCall:.Var:aVar:addDouble:324MethodCall:.Var:aVar:containsDouble:1MethodCall:.NegativeGo:!GoAddres:30Var:cDouble:3Double:1ArethmOp:+Double:2ArethmOp:*Assigment:=Var:cVar:cDouble:2ArethmOp:/Assigment:=Var:bDouble:0Assigment:=Var:lsVar:listOpNew:new!Assigment:=Var:bDouble:5LogicOp:<NegativeGo:!GoAddres:53Var:lsVar:addVar:bMethodCall:.Var:bVar:bDouble:1ArethmOp:+Assigment:=DirectGo:#GoAddres:37Var:fVar:lsVar:getDouble:4MethodCall:.Assigment:=Print:print
