@@ -4,17 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7948B8E3-85EA-4F94-B484-BCFEA8FF7B87}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>BW.SM</RootNamespace>
-    <AssemblyName>BW.SM</AssemblyName>
+    <ProjectGuid>{724C8D6F-3362-45AA-97D4-8CA6911B146C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BW.Optimization</RootNamespace>
+    <AssemblyName>BW.Optimization</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +23,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -43,30 +41,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="Converter.cs" />
+    <Compile Include="Optimazer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StackMachine.cs" />
-    <Compile Include="VarTable.cs" />
+    <Compile Include="Triad.cs" />
+    <Compile Include="TriadElement.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\BW.Optimazer\BW.Optimization.csproj">
-      <Project>{724C8D6F-3362-45AA-97D4-8CA6911B146C}</Project>
-      <Name>BW.Optimization</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Common\BW.Common.csproj">
-      <Project>{a17edd54-174f-4f80-939b-3696044b1bad}</Project>
+      <Project>{A17EDD54-174F-4F80-939B-3696044B1BAD}</Project>
       <Name>BW.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Lexer\BW.Lexer.csproj">
-      <Project>{939aac06-131a-43be-9f4b-ca638ed07c30}</Project>
-      <Name>BW.Lexer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Parser\BW.Parser.csproj">
-      <Project>{7502b573-6ba7-43cb-8310-d4c3287dff34}</Project>
-      <Name>BW.Parser</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

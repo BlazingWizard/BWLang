@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BW.Parser", "Parser\BW.Pars
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BW.Common", "Common\BW.Common.csproj", "{A17EDD54-174F-4F80-939B-3696044B1BAD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BW.Optimization", "BW.Optimazer\BW.Optimization.csproj", "{724C8D6F-3362-45AA-97D4-8CA6911B146C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{A17EDD54-174F-4F80-939B-3696044B1BAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A17EDD54-174F-4F80-939B-3696044B1BAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A17EDD54-174F-4F80-939B-3696044B1BAD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{724C8D6F-3362-45AA-97D4-8CA6911B146C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{724C8D6F-3362-45AA-97D4-8CA6911B146C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{724C8D6F-3362-45AA-97D4-8CA6911B146C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{724C8D6F-3362-45AA-97D4-8CA6911B146C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text;
 using BW.Lexer;
+using BW.Optimization;
 using BW.SyntaxAnalayzer;
 
 namespace BW.SM
@@ -23,7 +24,10 @@ namespace BW.SM
             var parser = new Parser(tokens);
             parser.CreatePolis();
 
-            var sm = new StackMachine(parser._polis);
+            var opt = new Optimazer(parser._polis);
+            var opt_polis = opt.Optimaze();
+
+            var sm = new StackMachine(opt_polis);
             sm.PerformProgram();
 
             var log = new StringBuilder();
@@ -35,6 +39,10 @@ namespace BW.SM
             log.AppendLine("POLIS INFO");
             log.AppendLine("============");
             log.AppendLine(string.Join("\r", parser._polis));
+            log.AppendLine("============");
+            log.AppendLine("OPTIMAZED POLIS INFO");
+            log.AppendLine("============");
+            log.AppendLine(string.Join("\r", opt_polis));
 
             var logDir = filePath.Replace(filePath.Substring(filePath.LastIndexOf("\\")), "");
             var logWriter = new StreamWriter(Path.Combine(logDir, "log.txt"));
