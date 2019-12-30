@@ -119,6 +119,17 @@ namespace BW.SyntaxAnalayzer
                 _tokenList.Rollback();
             }
 
+            if (StartThread())
+            {
+                _tokenList.Commit();
+                _tokenList.Next();
+                return true;
+            }
+            else
+            {
+                _tokenList.Rollback();
+            }
+
             return false;
         }
 
@@ -374,7 +385,7 @@ namespace BW.SyntaxAnalayzer
 
         private bool AssigmentStm()
         {
-            if (FunctionCall())
+            if (FunctionCall(false, ""))
             {
                 return true;
             }
@@ -418,11 +429,60 @@ namespace BW.SyntaxAnalayzer
             return false;
         }
 
-        private bool FunctionCall()
+
+        private bool StartThread()
+        {
+            if (_tokenList.CurrentToken.Lexemma != TerminalWords.K_THREAD)
+            {
+                return false;
+            }
+            _tokenList.Next();
+
+            if (!SingleValue())
+            {
+                return false;
+            }
+            var sectionName = _tokenList.CurrentToken.Value;
+            _tokenList.Next();
+
+            if (_tokenList.CurrentToken.Lexemma != TerminalWords.R_B)
+            {
+                return false;
+            }
+            _tokenList.Next();
+
+            if (_tokenList.CurrentToken.Lexemma != TerminalWords.THREAD_OP)
+            {
+                return false;
+            }
+            _tokenList.Next();
+
+            if (!FunctionCall(true, sectionName))
+            {
+                return false;
+            }
+            _polisCreator.CreateAsigmentPolis();
+            _tokenList.Next();
+            
+
+            if (_tokenList.CurrentToken.Lexemma != TerminalWords.EOL)
+            {
+                return false;
+            }
+
+            return true;
+        }
+       
+        private bool FunctionCall(bool callInNewThread, string sectionName)
         {
             if (_tokenList.CurrentToken.Lexemma != TerminalWords.VAR)
             {
                 return false;
+            }
+
+            if (callInNewThread)
+            {
+                _tokenList.CurrentToken.Value += $":{sectionName}";
             }
             _tokenList.Next();
 

@@ -29,7 +29,9 @@ namespace BW.Lexer
                 new Terminal(TerminalWords.K_PRINT, @"^print$", 2),
                 new Terminal(TerminalWords.K_DOT, @"^\.$", 1),
                 new Terminal(TerminalWords.K_NEW, @"^new!$", 2),
-                new Terminal(TerminalWords.K_FUNCTION, @"^function!$", 2)
+                new Terminal(TerminalWords.K_FUNCTION, @"^function!$", 2),
+                new Terminal(TerminalWords.K_THREAD, @"^thread\($", 2),
+                new Terminal(TerminalWords.THREAD_OP, @"^:$", 2)
             };
         }
         

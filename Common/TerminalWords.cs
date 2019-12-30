@@ -19,6 +19,8 @@
         K_NEW,
         K_DOT,
         K_FUNCTION,
-        FUNCTION_NAME
+        FUNCTION_NAME,
+        THREAD_OP,
+        K_THREAD
     }
 }

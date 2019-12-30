@@ -3,7 +3,7 @@
     public class Token
     {
         public TerminalWords Lexemma { get; set;}
-        public string Value { get; private set; }
+        public string Value { get; set; }
 
         public Token(TerminalWords lexemma, string value)
         {

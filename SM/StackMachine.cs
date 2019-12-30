@@ -3,6 +3,7 @@ using BW.Common.DataStruct;
 using Common.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace BW.SM
 {
@@ -44,7 +45,7 @@ namespace BW.SM
                     case PolisElementType.Var:
                         if (IsFunction(currentItem))
                         {
-                            PerformFunction(currentItem);
+                            StartFunction(currentItem);
                         }
                         else
                         {
@@ -81,29 +82,61 @@ namespace BW.SM
             }
         }
 
-        private void PerformFunction(PolisElement currentItem)
+        private void StartFunction(PolisElement currentItem)
         {
-            var functionName = currentItem.Value;
-            var value = GetValue(_programmPerformStack.Pop());
+            var peformInNewThread = currentItem.Value.Contains(":");
+
+            if (peformInNewThread)
+            {
+                var tmp = currentItem.Value.Split(':');
+                var functionName = tmp[0];
+                var sectionName = tmp[1];
+
+                Task.Run(() => PerformFunction(functionName));
+            }
+            else
+            {
+                var functionName = currentItem.Value;
+                PerformFunction(functionName);
+            }
+
+        }
+
+        private void PerformFunction(string functionName)
+        {
+            var argValue = GetValue(_programmPerformStack.Pop());
 
             var funcPolis = _functionTable[functionName];
-            funcPolis.Find(x => x.Type == PolisElementType.FunctionArg).Value = value.ToString();
+            funcPolis.Find(x => x.Type == PolisElementType.FunctionArg).Value = argValue.ToString();
 
             var smFunctionPerform = new StackMachine(funcPolis, _functionTable);
             smFunctionPerform.PerformProgram();
             var functionResult = smFunctionPerform.GetResult();
 
-            _programmPerformStack.Push(new PolisElement(PolisElementType.Double, functionResult.ToString()));
+            if (functionResult != null)
+            {
+                _programmPerformStack.Push(new PolisElement(PolisElementType.Double, functionResult.ToString()));
+            }
         }
 
         private object GetResult()
         {
-            return _varTable["result"];
+            object result;
+            try
+            {
+                result = _varTable["result"];
+            }
+            catch
+            {
+                result = null;
+            }
+            return result;
         }
 
         private bool IsFunction(PolisElement currentItem)
         {
-            return _functionTable.ContainsKey(currentItem.Value);
+            var tokenValue = currentItem.Value.Contains(":") ? currentItem.Value.Split(':')[0] : currentItem.Value;
+            return _functionTable.ContainsKey(tokenValue);
         }
 
         private void PerformMethodCall()
@@ -256,7 +289,7 @@ namespace BW.SM
         private void PerformAssigment()
         {
             var topElement = _programmPerformStack.Pop();
-            
+
 
             if (topElement.Type == PolisElementType.OpNew)
             {

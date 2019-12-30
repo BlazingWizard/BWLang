@@ -65,8 +65,21 @@ namespace BW.SyntaxAnalayzer
                     break;
                 }
 
+                // Обработка потока (костыль)
+                if (token.Lexemma == TerminalWords.K_THREAD)
+                {
+                    i += 3;
+                    continue;
+                }
+
+                var tokenValue = token.Value.Contains(":") && token.Lexemma == TerminalWords.VAR ? token.Value.Split(':')[0] : token.Value;
+                if (_functionTable.ContainsKey(tokenValue))
+                {
+                    tokenValue = "function";
+                }
+
                 // Если операнд
-                if (!opPriority.ContainsKey(token.Value) && !_functionTable.ContainsKey(token.Value))
+                if (!opPriority.ContainsKey(tokenValue))
                 {
                     _polis.Add(new PolisElement(token));
                 }
@@ -93,7 +106,6 @@ namespace BW.SyntaxAnalayzer
                         else
                         {
                             // Оставшиеся операторы
-                            var tokenValue = _functionTable.ContainsKey(token.Value) ? "function" : token.Value;
                             while (opStack.Count != 0 && opPriority[tokenValue] <= opPriority[opStack.Peek().Value])
                             {
                                 _polis.Add(new PolisElement(opStack.Pop()));

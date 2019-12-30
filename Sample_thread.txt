@@ -1,0 +1,10 @@
+function! square(a){
+	b = a * a;
+	result = b;
+	print;
+}
+
+a = 1;
+thread(1):square(7);
+z = 3;
+print;

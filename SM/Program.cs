@@ -51,7 +51,7 @@ namespace BW.SM
                 logWriter.Write(log.ToString());
             }
 
-            Console.Read();
+            Console.ReadLine();
         }
     }
 }
