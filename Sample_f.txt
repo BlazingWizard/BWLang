@@ -1,0 +1,8 @@
+function! square(a){
+	b = a * a;
+	result = b;
+}
+
+
+c = square(7);
+print;

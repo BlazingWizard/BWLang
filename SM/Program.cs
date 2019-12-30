@@ -24,10 +24,10 @@ namespace BW.SM
             var parser = new Parser(tokens);
             parser.CreatePolis();
 
-            var opt = new Optimazer(parser._polis);
+            var opt = new Optimazer(parser.Polis);
             var opt_polis = opt.Optimaze();
 
-            var sm = new StackMachine(opt_polis);
+            var sm = new StackMachine(opt_polis, parser.FunctionTable);
             sm.PerformProgram();
 
             var log = new StringBuilder();
@@ -38,7 +38,7 @@ namespace BW.SM
             log.AppendLine("============");
             log.AppendLine("POLIS INFO");
             log.AppendLine("============");
-            log.AppendLine(string.Join("\r", parser._polis));
+            log.AppendLine(string.Join("\r", parser.Polis));
             log.AppendLine("============");
             log.AppendLine("OPTIMAZED POLIS INFO");
             log.AppendLine("============");

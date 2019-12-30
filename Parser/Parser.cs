@@ -7,23 +7,26 @@ namespace BW.SyntaxAnalayzer
 {
     public class Parser
     {
-        private TokenList _tokenList;
+        public Dictionary<string, List<PolisElement>> FunctionTable;
 
-        public List<PolisElement> _polis;
+        public List<PolisElement> Polis;
+
+        private TokenList _tokenList;
 
         private PolisCreator _polisCreator;
 
         public Parser(List<Token> tokenList)
         {
             _tokenList = new TokenList(tokenList);
-            _polis = new List<PolisElement>();
-            _polisCreator = new PolisCreator(_tokenList, _polis);
+            Polis = new List<PolisElement>();
+            FunctionTable = new Dictionary<string, List<PolisElement>>();
+            _polisCreator = new PolisCreator(_tokenList, Polis, FunctionTable);
         }
 
         public List<PolisElement> CreatePolis()
         {
             Lang();
-            return _polis;
+            return Polis;
         }
 
         private void Lang()
@@ -105,7 +108,72 @@ namespace BW.SyntaxAnalayzer
                 _tokenList.Rollback();
             }
 
+            if (FunctionDelcaration())
+            {
+                _tokenList.Commit();
+                _tokenList.Next();
+                return true;
+            }
+            else
+            {
+                _tokenList.Rollback();
+            }
+
             return false;
+        }
+
+        private bool FunctionDelcaration()
+        {
+            if(_tokenList.CurrentToken.Lexemma != TerminalWords.K_FUNCTION)
+            {
+                return false;
+            }
+            _tokenList.Next();
+
+
+            if (_tokenList.CurrentToken.Lexemma != TerminalWords.VAR)
+            {
+                return false;
+            }
+            _polisCreator.AddFunctionStart(_tokenList.CurrentToken.Value);
+            _tokenList.Next();
+
+            if (!Args())
+            {
+                return false;
+            }
+            _tokenList.Next();
+
+            if (!Body())
+            {
+                return false;
+            }
+            _polisCreator.CreateFunctionPolis();
+
+            return true;
+        }
+
+        private bool Args()
+        {
+            if(_tokenList.CurrentToken.Lexemma != TerminalWords.L_B)
+            {
+                return false;
+            }
+            _tokenList.Next();
+
+            if (_tokenList.CurrentToken.Lexemma != TerminalWords.VAR)
+            {
+                return false;
+            }
+            _polisCreator.AddArgPolis(_tokenList.CurrentToken.Value);
+            _tokenList.Next();
+
+            if (_tokenList.CurrentToken.Lexemma != TerminalWords.R_B)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         private bool Print()
@@ -130,7 +198,7 @@ namespace BW.SyntaxAnalayzer
             {
                 return false;
             }
-            var startPos = _polis.Count;
+            var startPos = Polis.Count;
             _tokenList.Next();
             _tokenList.Commit();
 
@@ -306,6 +374,18 @@ namespace BW.SyntaxAnalayzer
 
         private bool AssigmentStm()
         {
+            if (FunctionCall())
+            {
+                return true;
+            }
+            else
+            {
+                _tokenList.Rollback();
+                // Костыль
+                _tokenList.Next();
+                _tokenList.Next();
+            }
+
             if (NewObject())
             {
                 return true;
@@ -336,6 +416,34 @@ namespace BW.SyntaxAnalayzer
             }
 
             return false;
+        }
+
+        private bool FunctionCall()
+        {
+            if (_tokenList.CurrentToken.Lexemma != TerminalWords.VAR)
+            {
+                return false;
+            }
+            _tokenList.Next();
+
+            if (_tokenList.CurrentToken.Lexemma != TerminalWords.L_B)
+            {
+                return false;
+            }
+            _tokenList.Next();
+
+            if (!SingleValue())
+            {
+                return false;
+            }
+            _tokenList.Next();
+
+            if (_tokenList.CurrentToken.Lexemma != TerminalWords.R_B)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         private bool MethodCall()

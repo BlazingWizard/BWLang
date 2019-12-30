@@ -13,6 +13,8 @@
         Print,
         Bool,
         OpNew,
-        MethodCall
+        MethodCall,
+        FunctionStart,
+        FunctionArg
     }
 }

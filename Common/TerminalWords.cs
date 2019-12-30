@@ -17,6 +17,8 @@
         R_CB,
         EOL,
         K_NEW,
-        K_DOT
+        K_DOT,
+        K_FUNCTION,
+        FUNCTION_NAME
     }
 }

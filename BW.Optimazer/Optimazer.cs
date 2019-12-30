@@ -11,7 +11,7 @@ namespace BW.Optimization
     {
         private List<PolisElement> _polisForOptimaze;
 
-        private bool _canOptimaze = true;
+        private bool _canOptimaze = false;
 
         private Dictionary<string, double?> _varTable = new Dictionary<string, double?>();
 

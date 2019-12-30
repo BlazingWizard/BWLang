@@ -10,6 +10,8 @@ namespace BW.SM
     {
         private List<PolisElement> _polis;
 
+        private Dictionary<string, List<PolisElement>> _functionTable;
+
         private Stack<PolisElement> _programmPerformStack;
 
         private VarTable _varTable;
@@ -18,9 +20,11 @@ namespace BW.SM
 
         private Dictionary<string, Dictionary<string, Func<double[], object>>> _availibleMethods;
 
-        public StackMachine(List<PolisElement> polis)
+        public StackMachine(List<PolisElement> polis, Dictionary<string, List<PolisElement>> functionTable)
         {
             _polis = polis;
+            _functionTable = functionTable;
+
             _varTable = new VarTable();
             _programmPerformStack = new Stack<PolisElement>();
 
@@ -38,6 +42,16 @@ namespace BW.SM
                 switch (currentItem.Type)
                 {
                     case PolisElementType.Var:
+                        if (IsFunction(currentItem))
+                        {
+                            PerformFunction(currentItem);
+                        }
+                        else
+                        {
+                            _programmPerformStack.Push(currentItem);
+                        }
+                        break;
+                    case PolisElementType.FunctionArg:
                     case PolisElementType.Double:
                     case PolisElementType.OpNew:
                         _programmPerformStack.Push(currentItem);
@@ -65,6 +79,31 @@ namespace BW.SM
                         break;
                 }
             }
+        }
+
+        private void PerformFunction(PolisElement currentItem)
+        {
+            var functionName = currentItem.Value;
+            var value = GetValue(_programmPerformStack.Pop());
+
+            var funcPolis = _functionTable[functionName];
+            funcPolis.Find(x => x.Type == PolisElementType.FunctionArg).Value = value.ToString();
+
+            var smFunctionPerform = new StackMachine(funcPolis, _functionTable);
+            smFunctionPerform.PerformProgram();
+            var functionResult = smFunctionPerform.GetResult();
+
+            _programmPerformStack.Push(new PolisElement(PolisElementType.Double, functionResult.ToString()));
+        }
+
+        private object GetResult()
+        {
+            return _varTable["result"];
+        }
+
+        private bool IsFunction(PolisElement currentItem)
+        {
+            return _functionTable.ContainsKey(currentItem.Value);
         }
 
         private void PerformMethodCall()
@@ -206,7 +245,7 @@ namespace BW.SM
                 return (double)_varTable[varName];
             }
 
-            if (element.Type == PolisElementType.Double)
+            if (element.Type == PolisElementType.Double || element.Type == PolisElementType.FunctionArg)
             {
                 return double.Parse(element.Value);
             }
@@ -235,7 +274,7 @@ namespace BW.SM
             else
             {
                 var var = _programmPerformStack.Pop();
-                _varTable["double " + var.Value] = double.Parse(topElement.Value);
+                _varTable["double " + var.Value] = GetValue(topElement);
             }
         }
     }

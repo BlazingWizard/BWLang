@@ -28,7 +28,8 @@ namespace BW.Lexer
                 new Terminal(TerminalWords.L_OP, @"^(==|!=|>|<)$", 1),
                 new Terminal(TerminalWords.K_PRINT, @"^print$", 2),
                 new Terminal(TerminalWords.K_DOT, @"^\.$", 1),
-                new Terminal(TerminalWords.K_NEW, @"^new!$", 2)
+                new Terminal(TerminalWords.K_NEW, @"^new!$", 2),
+                new Terminal(TerminalWords.K_FUNCTION, @"^function!$", 2)
             };
         }
         

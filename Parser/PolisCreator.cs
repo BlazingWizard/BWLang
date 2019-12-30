@@ -8,12 +8,15 @@ namespace BW.SyntaxAnalayzer
     {
         private TokenList _tokenList;
         private List<PolisElement> _polis;
+        private Dictionary<string, List<PolisElement>> _functionTable;
+
         private const string _tmpAddres = "ForReplace";
 
-        public PolisCreator(TokenList tokenList, List<PolisElement> polis)
+        public PolisCreator(TokenList tokenList, List<PolisElement> polis, Dictionary<string, List<PolisElement>> functionTable)
         {
             _tokenList = tokenList;
             _polis = polis;
+            _functionTable = functionTable;
         }
 
         public void CreateAsigmentPolis()
@@ -28,7 +31,8 @@ namespace BW.SyntaxAnalayzer
                 { "-", 2},
                 { "+", 2},
                 { ".", 2 },
-                { "new!", 2 }
+                { "new!", 2 },
+                { "function" , 2 }
             };
             CreateStatmenPolis(opPriority);
         }
@@ -62,7 +66,7 @@ namespace BW.SyntaxAnalayzer
                 }
 
                 // Если операнд
-                if (!opPriority.ContainsKey(token.Value))
+                if (!opPriority.ContainsKey(token.Value) && !_functionTable.ContainsKey(token.Value))
                 {
                     _polis.Add(new PolisElement(token));
                 }
@@ -89,7 +93,8 @@ namespace BW.SyntaxAnalayzer
                         else
                         {
                             // Оставшиеся операторы
-                            while (opStack.Count != 0 && opPriority[token.Value] <= opPriority[opStack.Peek().Value])
+                            var tokenValue = _functionTable.ContainsKey(token.Value) ? "function" : token.Value;
+                            while (opStack.Count != 0 && opPriority[tokenValue] <= opPriority[opStack.Peek().Value])
                             {
                                 _polis.Add(new PolisElement(opStack.Pop()));
                             }
@@ -123,6 +128,13 @@ namespace BW.SyntaxAnalayzer
             AddGoAddres(goAddress);
         }
 
+        internal void AddArgPolis(string argName)
+        {
+            _polis.Add(new PolisElement(PolisElementType.Var, argName));
+            _polis.Add(new PolisElement(PolisElementType.FunctionArg, ""));
+            _polis.Add(new PolisElement(PolisElementType.Assigment, "="));
+        }
+
         public void AddGoAddres(int? goAddress)
         {
             if (goAddress != null)
@@ -147,5 +159,25 @@ namespace BW.SyntaxAnalayzer
             }
         }
 
+
+        public void AddFunctionStart(string name)
+        {
+            _polis.Add(new PolisElement(PolisElementType.FunctionStart, name));
+        }
+
+        public void CreateFunctionPolis()
+        {
+            var startIndex = _polis.FindIndex(x => x.Type == PolisElementType.FunctionStart);
+            var functionName = _polis[startIndex].Value;
+
+            var f_polis = new List<PolisElement>();
+            for (var i = startIndex + 1; i < _polis.Count; i++)
+            {
+                f_polis.Add(_polis[i]);
+            }
+
+            _functionTable.Add(functionName, f_polis);
+            _polis.RemoveRange(startIndex, _polis.Count - startIndex);  
+        }
     }
 }
